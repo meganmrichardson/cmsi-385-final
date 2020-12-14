@@ -6,12 +6,15 @@ type InputSymbol = string;
 // add recursion to finish accept method
 // add alphabet so that accepts more than just 0 and 1
 
+// must change tests so transitions return State[]
+
 export interface NFADescription {
   transitions: {
     [key: string]: {
       // interface should take in alphabet instead of 0, 1
       0: State[];
       1: State[];
+      '': State[]; // lambda moves
     };
   };
   start: State;
@@ -27,26 +30,39 @@ export default class NondeterministicFiniteStateMachine {
 
   transition(state: State, symbol: InputSymbol): State[] {
     const {
-      description: { transitions }
+      description: { transitions },
     } = this;
 
-    return transitions[state][symbol];
+    const possibleTransitions = [];
+    possibleTransitions.concat(transitions[state][symbol]);
+
+    // change to while loop and account for ALL possible lambda moves
+    for (const newState of transitions[state]['']) {
+      possibleTransitions.concat(transitions[newState][symbol]);
+    }
+    // still an issue with mutltiple lambdas in a row
+
+    return possibleTransitions;
   }
 
   // recursive
-  accept(s: string, state = this.description.start): boolean {
+  accept(s: string, state = this.description.start) {
     const {
-      description: { acceptStates }
+      description: { acceptStates },
     } = this;
-    // if at last char of string, return if at accept state
-    if (s.length === 0) {
-      return acceptStates.includes(state);
-    }
-    // else recurse on all the possible next states
     const nextStates = this.transition(state, s.charAt(0));
-    for (const possibleState of nextStates) {
-      this.accept(s.substr(1), possibleState);
-    }
-    return false; // just to get rid of "not all codepaths return a value"
+
+    console.log(s);
+    console.log(state);
+    console.log('hi');
+    // if at last char of string, return if at accept state
+    // else recurse on all possible next states
+    return s.length === 0
+      ? acceptStates.includes(state)
+      : function () {
+          for (let i = 0; i < nextStates.length; i += 1) {
+            return this.accept(s.substr(1), nextStates[i]);
+          }
+        };
   }
 }
