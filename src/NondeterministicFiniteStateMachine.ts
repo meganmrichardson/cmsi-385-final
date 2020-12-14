@@ -41,28 +41,24 @@ export default class NondeterministicFiniteStateMachine {
       possibleTransitions.concat(transitions[newState][symbol]);
     }
     // still an issue with mutltiple lambdas in a row
-
     return possibleTransitions;
   }
 
   // recursive
-  accept(s: string, state = this.description.start) {
+  accept(s: string, state = [this.description.start]): boolean {
     const {
       description: { acceptStates },
     } = this;
-    const nextStates = this.transition(state, s.charAt(0));
+    const nextStates = [];
+    for (const currentState of state) {
+      nextStates.concat(this.transition(currentState, s.charAt(0)));
+    }
 
-    console.log(s);
-    console.log(state);
-    console.log('hi');
     // if at last char of string, return if at accept state
     // else recurse on all possible next states
+
     return s.length === 0
-      ? acceptStates.includes(state)
-      : function () {
-          for (let i = 0; i < nextStates.length; i += 1) {
-            return this.accept(s.substr(1), nextStates[i]);
-          }
-        };
+      ? nextStates.some((r) => acceptStates.includes(r))
+      : this.accept(s.substr(1), nextStates);
   }
 }
