@@ -37,17 +37,7 @@ export default class NondeterministicFiniteStateMachine {
     console.log(state);
 
     let possibleTransitions = [];
-    // possibleTransitions = possibleTransitions.concat(
-    //   transitions[state][symbol]
-    // );
-
     let usedSymbol = false;
-
-    // keep track of tested states
-    // make array for newly added
-    // take first from newly added not tested before
-
-    // if state + symbol is not a transition then end somehow (i.e. 1s in this example)
 
     // only loops the number of times of all states
     for (let i = 0; i < Object.keys(transitions).length; i++) {
@@ -76,6 +66,11 @@ export default class NondeterministicFiniteStateMachine {
       }
     }
 
+    // if you never used the symbol, there is no transition (dead state)
+    if (!usedSymbol) {
+      possibleTransitions = [];
+    }
+
     console.log('TRANSITIONS');
     console.log(possibleTransitions);
 
@@ -83,6 +78,8 @@ export default class NondeterministicFiniteStateMachine {
   }
 
   accept(s: string, state = [this.description.start]): boolean {
+    // get rid of repeats in state array
+
     console.log('CURRENT STATE');
     console.log(state);
     const {
@@ -97,9 +94,6 @@ export default class NondeterministicFiniteStateMachine {
         );
       }
     }
-
-    // if at last char of string, return if at accept state
-    // else recurse on all possible next states
 
     return s.length === 0
       ? state.some((r) => acceptStates.includes(r))
