@@ -1,12 +1,7 @@
 type State = string;
 type InputSymbol = string;
 
-// currently implements dfa -> must convert to nfa
-// transition(state, symbol): set of states
-// add recursion to finish accept method
 // add alphabet so that accepts more than just 0 and 1
-
-// must change tests so transitions return State[]
 
 export interface NFADescription {
   transitions: {
@@ -32,9 +27,6 @@ export default class NondeterministicFiniteStateMachine {
     const {
       description: { transitions },
     } = this;
-
-    console.log(symbol);
-    console.log(state);
 
     let possibleTransitions = [];
     let usedSymbol = false;
@@ -66,22 +58,14 @@ export default class NondeterministicFiniteStateMachine {
       }
     }
 
-    // if you never used the symbol, there is no transition (dead state)
     if (!usedSymbol) {
       possibleTransitions = [];
     }
-
-    console.log('TRANSITIONS');
-    console.log(possibleTransitions);
 
     return possibleTransitions;
   }
 
   accept(s: string, state = [this.description.start]): boolean {
-    // get rid of repeats in state array
-
-    console.log('CURRENT STATE');
-    console.log(state);
     const {
       description: { acceptStates },
     } = this;
@@ -95,8 +79,10 @@ export default class NondeterministicFiniteStateMachine {
       }
     }
 
+    const uniqueStates = [...new Set(nextStates)];
+
     return s.length === 0
       ? state.some((r) => acceptStates.includes(r))
-      : this.accept(s.substr(1), nextStates);
+      : this.accept(s.substr(1), uniqueStates);
   }
 }
