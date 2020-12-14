@@ -60,8 +60,7 @@ const machineTests: {
       start: 'r0',
       acceptStates: ['r0'],
     },
-    // acceptedStrings: ['', '0', '11', '00000', '1100000'],
-    acceptedStrings: ['0'],
+    acceptedStrings: ['', '0', '11', '00000', '1100000'],
     rejectedStrings: ['1010', '10', '100000', '1011111'],
   },
   // strings divisible by 4
@@ -115,6 +114,37 @@ const machineTests: {
     acceptedStrings: ['0', '', '00'],
     rejectedStrings: ['1111', '1', '01', '10110'],
   },
+  // starts with 0 and ends with another 0
+  startAndEndZero: {
+    description: {
+      transitions: {
+        A: {
+          0: [],
+          1: [],
+          '': ['B'],
+        },
+        B: {
+          0: ['C'],
+          1: [],
+          '': [],
+        },
+        C: {
+          0: ['C', 'D'],
+          1: ['C'],
+          '': [],
+        },
+        D: {
+          0: [],
+          1: [],
+          '': ['D'],
+        },
+      },
+      start: 'A',
+      acceptStates: ['A', 'D'],
+    },
+    acceptedStrings: ['00', '010', '0000', '0100'],
+    rejectedStrings: ['1111', '1', '0', '10110'],
+  },
 };
 
 for (const [name, testDescription] of Object.entries(machineTests)) {
@@ -131,7 +161,6 @@ for (const [name, testDescription] of Object.entries(machineTests)) {
     );
     const { acceptedStrings, rejectedStrings } = testDescription;
     for (const s of acceptedStrings) {
-      console.log(s);
       t.assert(nfa.accept(s));
     }
     for (const s of rejectedStrings) {
