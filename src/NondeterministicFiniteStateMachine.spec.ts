@@ -112,7 +112,7 @@ const machineTests: {
       start: 'A',
       acceptStates: ['A', 'C'],
     },
-    acceptedStrings: ['00', '0', '0000000', '0000'],
+    acceptedStrings: ['0', '', '00'],
     rejectedStrings: ['1111', '1', '01', '10110'],
   },
 };
@@ -144,6 +144,7 @@ for (const [name, testDescription] of Object.entries(machineTests)) {
     );
     const { acceptedStrings, rejectedStrings } = testDescription;
     for (const s of acceptedStrings) {
+      console.log(s);
       t.assert(nfa.accept(s));
     }
     for (const s of rejectedStrings) {

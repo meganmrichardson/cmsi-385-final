@@ -33,32 +33,76 @@ export default class NondeterministicFiniteStateMachine {
       description: { transitions },
     } = this;
 
-    const possibleTransitions = [];
-    possibleTransitions.concat(transitions[state][symbol]);
+    console.log(symbol);
+    console.log(state);
 
-    // change to while loop and account for ALL possible lambda moves
-    for (const newState of transitions[state]['']) {
-      possibleTransitions.concat(transitions[newState][symbol]);
+    let possibleTransitions = [];
+    // possibleTransitions = possibleTransitions.concat(
+    //   transitions[state][symbol]
+    // );
+
+    let usedSymbol = false;
+
+    // keep track of tested states
+    // make array for newly added
+    // take first from newly added not tested before
+
+    // if state + symbol is not a transition then end somehow (i.e. 1s in this example)
+
+    // only loops the number of times of all states
+    for (let i = 0; i < Object.keys(transitions).length; i++) {
+      let newlyAdded = [];
+      if (!usedSymbol) {
+        for (const newStates of transitions[state][symbol]) {
+          for (const newState of newStates) {
+            if (!possibleTransitions.includes(newState)) {
+              newlyAdded = newlyAdded.concat(newStates);
+              possibleTransitions = possibleTransitions.concat(newStates);
+              usedSymbol = true;
+            }
+          }
+        }
+      }
+      for (const newStates of transitions[state]['']) {
+        for (const newState of newStates) {
+          if (!possibleTransitions.includes(newState)) {
+            newlyAdded = newlyAdded.concat(newStates);
+            possibleTransitions = possibleTransitions.concat(newStates);
+          }
+        }
+      }
+      for (let i = newlyAdded.length - 1; i >= 0; i--) {
+        state = newlyAdded[i];
+      }
     }
-    // still an issue with mutltiple lambdas in a row
+
+    console.log('TRANSITIONS');
+    console.log(possibleTransitions);
+
     return possibleTransitions;
   }
 
-  // recursive
   accept(s: string, state = [this.description.start]): boolean {
+    console.log('CURRENT STATE');
+    console.log(state);
     const {
       description: { acceptStates },
     } = this;
-    const nextStates = [];
-    for (const currentState of state) {
-      nextStates.concat(this.transition(currentState, s.charAt(0)));
+
+    let nextStates = [];
+    if (s.length > 0) {
+      for (const currentState of state) {
+        nextStates = nextStates.concat(
+          this.transition(currentState, s.charAt(0))
+        );
+      }
     }
 
     // if at last char of string, return if at accept state
     // else recurse on all possible next states
 
     return s.length === 0
-      ? nextStates.some((r) => acceptStates.includes(r))
+      ? state.some((r) => acceptStates.includes(r))
       : this.accept(s.substr(1), nextStates);
   }
 }
