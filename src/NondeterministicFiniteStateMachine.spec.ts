@@ -11,91 +11,172 @@ const machineTests: {
     rejectedStrings: string[];
   };
 } = {
-  // should still work as an nfa
-  startsWith0: {
+  // startsWith0: {
+  //   description: {
+  //     transitions: {
+  //       S: {
+  //         0: ['A'],
+  //         1: [],
+  //         '': [],
+  //       },
+  //       A: {
+  //         0: ['A'],
+  //         1: ['A'],
+  //         '': [],
+  //       },
+  //     },
+  //     start: 'S',
+  //     acceptStates: ['A'],
+  //   },
+  //   acceptedStrings: ['0', '001', '0111111', '00000'],
+  //   rejectedStrings: ['', '1', '1000000', '1101'],
+  // },
+  // // strings divisible by 3
+  // div3: {
+  //   description: {
+  //     transitions: {
+  //       r0: {
+  //         0: ['r0'],
+  //         1: ['r1'],
+  //         '': [],
+  //       },
+  //       r1: {
+  //         0: ['r2'],
+  //         1: ['r0'],
+  //         '': [],
+  //       },
+  //       r2: {
+  //         0: ['r1'],
+  //         1: ['r2'],
+  //         '': [],
+  //       },
+  //     },
+  //     start: 'r0',
+  //     acceptStates: ['r0'],
+  //   },
+  //   acceptedStrings: ['', '0', '11', '00000', '1100000'],
+  //   rejectedStrings: ['1010', '10', '100000', '1011111'],
+  // },
+  // // strings divisible by 4
+  // div4: {
+  //   description: {
+  //     transitions: {
+  //       q0: {
+  //         0: ['q1', 'q0'],
+  //         1: ['q0'],
+  //         '': [],
+  //       },
+  //       q1: {
+  //         0: ['q2'],
+  //         1: [],
+  //         '': [],
+  //       },
+  //       q2: {
+  //         0: [],
+  //         1: [],
+  //         '': [],
+  //       },
+  //     },
+  //     start: 'q0',
+  //     acceptStates: ['q2'],
+  //   },
+  //   acceptedStrings: ['00', '1100', '010100', '0000'],
+  //   rejectedStrings: ['1111', '1', '0', '10110'],
+  // },
+  // lambdaZeros: {
+  //   description: {
+  //     transitions: {
+  //       A: {
+  //         0: [],
+  //         1: [],
+  //         '': ['B'],
+  //       },
+  //       B: {
+  //         0: ['C'],
+  //         1: [],
+  //         '': [],
+  //       },
+  //       C: {
+  //         0: [],
+  //         1: [],
+  //         '': ['A'],
+  //       },
+  //     },
+  //     start: 'A',
+  //     acceptStates: ['A', 'C'],
+  //   },
+  //   acceptedStrings: ['0', '', '00'],
+  //   rejectedStrings: ['1111', '1', '01', '10110'],
+  // },
+  // // starts with 0 and ends with another 0
+  // startAndEndZero: {
+  //   description: {
+  //     transitions: {
+  //       A: {
+  //         0: [],
+  //         1: [],
+  //         '': ['B'],
+  //       },
+  //       B: {
+  //         0: ['C'],
+  //         1: [],
+  //         '': [],
+  //       },
+  //       C: {
+  //         0: ['C', 'D'],
+  //         1: ['C'],
+  //         '': [],
+  //       },
+  //       D: {
+  //         0: [],
+  //         1: [],
+  //         '': ['D'],
+  //       },
+  //     },
+  //     start: 'A',
+  //     acceptStates: ['A', 'D'],
+  //   },
+  //   acceptedStrings: ['00', '010', '0000', '0100'],
+  //   rejectedStrings: ['1111', '1', '0', '10110'],
+  // },
+  // noConsecutive0: {
+  //   description: {
+  //     transitions: {
+  //       A: {
+  //         0: ['C'],
+  //         1: ['B'],
+  //         '': [],
+  //       },
+  //       B: {
+  //         0: ['C'],
+  //         1: ['B'],
+  //         '': [],
+  //       },
+  //       C: {
+  //         0: ['D'],
+  //         1: ['B'],
+  //         '': [],
+  //       },
+  //       D: {
+  //         0: ['D'],
+  //         1: ['D'],
+  //         '': [],
+  //       },
+  //     },
+  //     start: 'A',
+  //     acceptStates: ['A', 'B', 'C'],
+  //   },
+  //   acceptedStrings: ['', '0', '01', '0111', '010101010'],
+  //   rejectedStrings: ['00', '100', '100101', '0001'],
+  // },
+  // accepts '00' or '01' (nothing else!)
+  zeroOneOrZeroZero: {
     description: {
       transitions: {
-        S: {
-          0: ['A'],
-          1: ['B'],
-          '': [],
-        },
         A: {
-          0: ['A'],
-          1: ['A'],
-          '': [],
-        },
-        B: {
-          0: ['B'],
-          1: ['B'],
-          '': [],
-        },
-      },
-      start: 'S',
-      acceptStates: ['A'],
-    },
-    acceptedStrings: ['0', '001', '0111111', '00000'],
-    rejectedStrings: ['', '1', '1000000', '1101'],
-  },
-  // should still work as nfa
-  div3: {
-    description: {
-      transitions: {
-        r0: {
-          0: ['r0'],
-          1: ['r1'],
-          '': [],
-        },
-        r1: {
-          0: ['r2'],
-          1: ['r0'],
-          '': [],
-        },
-        r2: {
-          0: ['r1'],
-          1: ['r2'],
-          '': [],
-        },
-      },
-      start: 'r0',
-      acceptStates: ['r0'],
-    },
-    acceptedStrings: ['', '0', '11', '00000', '1100000'],
-    rejectedStrings: ['1010', '10', '100000', '1011111'],
-  },
-  // strings divisible by 4
-  div4: {
-    description: {
-      transitions: {
-        q0: {
-          0: ['q1', 'q0'],
-          1: ['q0'],
-          '': [],
-        },
-        q1: {
-          0: ['q2'],
-          1: [],
-          '': [],
-        },
-        q2: {
           0: [],
           1: [],
-          '': [],
-        },
-      },
-      start: 'q0',
-      acceptStates: ['q2'],
-    },
-    acceptedStrings: ['00', '1100', '010100', '0000'],
-    rejectedStrings: ['1111', '1', '0', '10110'],
-  },
-  lambdaZeros: {
-    description: {
-      transitions: {
-        A: {
-          0: [],
-          1: [],
-          '': ['B'],
+          '': ['B', 'E'],
         },
         B: {
           0: ['C'],
@@ -104,46 +185,36 @@ const machineTests: {
         },
         C: {
           0: [],
-          1: [],
-          '': ['A'],
-        },
-      },
-      start: 'A',
-      acceptStates: ['A', 'C'],
-    },
-    acceptedStrings: ['0', '', '00'],
-    rejectedStrings: ['1111', '1', '01', '10110'],
-  },
-  // starts with 0 and ends with another 0
-  startAndEndZero: {
-    description: {
-      transitions: {
-        A: {
-          0: [],
-          1: [],
-          '': ['B'],
-        },
-        B: {
-          0: ['C'],
-          1: [],
-          '': [],
-        },
-        C: {
-          0: ['C', 'D'],
-          1: ['C'],
+          1: ['D'],
           '': [],
         },
         D: {
           0: [],
           1: [],
-          '': ['D'],
+          '': [],
+        },
+        E: {
+          0: ['F'],
+          1: [],
+          '': [],
+        },
+        F: {
+          0: ['G'],
+          1: [],
+          '': [],
+        },
+        G: {
+          0: [],
+          1: [],
+          '': [],
         },
       },
       start: 'A',
-      acceptStates: ['A', 'D'],
+      acceptStates: ['D', 'G'],
     },
-    acceptedStrings: ['00', '010', '0000', '0100'],
-    rejectedStrings: ['1111', '1', '0', '10110'],
+    acceptedStrings: ['00'],
+    rejectedStrings: [],
+    // rejectedStrings: ['', '100', '0101', '0001'],
   },
 };
 

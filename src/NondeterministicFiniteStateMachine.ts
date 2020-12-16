@@ -1,7 +1,8 @@
 type State = string;
 type InputSymbol = string;
 
-// add alphabet so that accepts more than just 0 and 1
+// just make sure code is clear and concise and testing is good
+// and that I have a variety of machines being tested
 
 export interface NFADescription {
   transitions: {
@@ -24,6 +25,8 @@ export default class NondeterministicFiniteStateMachine {
   }
 
   transition(state: State, symbol: InputSymbol): State[] {
+    console.log(state);
+
     const {
       description: { transitions },
     } = this;
@@ -33,7 +36,11 @@ export default class NondeterministicFiniteStateMachine {
 
     // only loops the number of times of all states
     for (let i = 0; i < Object.keys(transitions).length; i++) {
+      console.log(i);
       let newlyAdded = [];
+      // this doesn't work
+      // you can use the symbol multiple times just not on same "path" in machine\
+      // if you haven't used symbol or on different path (how do we keep track of what path we are on)
       if (!usedSymbol) {
         for (const newStates of transitions[state][symbol]) {
           for (const newState of newStates) {
@@ -62,6 +69,9 @@ export default class NondeterministicFiniteStateMachine {
       possibleTransitions = [];
     }
 
+    console.log(symbol);
+    console.log(possibleTransitions);
+
     return possibleTransitions;
   }
 
@@ -69,6 +79,10 @@ export default class NondeterministicFiniteStateMachine {
     const {
       description: { acceptStates },
     } = this;
+
+    console.log('hi');
+    console.log(state);
+    console.log('bye');
 
     let nextStates = [];
     if (s.length > 0) {
@@ -80,6 +94,10 @@ export default class NondeterministicFiniteStateMachine {
     }
 
     const uniqueStates = [...new Set(nextStates)];
+
+    console.log(state); // doesn't
+    console.log(s);
+    console.log(uniqueStates);
 
     return s.length === 0
       ? state.some((r) => acceptStates.includes(r))
