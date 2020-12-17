@@ -11,6 +11,7 @@ const machineTests: {
     rejectedStrings: string[];
   };
 } = {
+  // any string that starts with 0
   startsWith0: {
     description: {
       transitions: {
@@ -83,6 +84,7 @@ const machineTests: {
     acceptedStrings: ['00', '1100', '010100', '0000'],
     rejectedStrings: ['1111', '1', '0', '10110'],
   },
+  // string with any amount of 0s (including none)
   lambdaZeros: {
     description: {
       transitions: {
@@ -139,6 +141,7 @@ const machineTests: {
     acceptedStrings: ['00', '010', '0000', '0100'],
     rejectedStrings: ['1111', '1', '0', '10110'],
   },
+  // any string with no 0s next to each other
   noConsecutive0: {
     description: {
       transitions: {
@@ -213,7 +216,6 @@ const machineTests: {
       acceptStates: ['D', 'G'],
     },
     acceptedStrings: ['00', '01'],
-    // rejectedStrings: [],
     rejectedStrings: ['', '100', '0101', '0001'],
   },
 };
