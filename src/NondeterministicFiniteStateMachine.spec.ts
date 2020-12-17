@@ -16,7 +16,39 @@ const machineTests: {
     rejectedStrings: string[];
   };
 } = {
-  // any string that starts with 0
+  // Machine acccepts all strings
+  acceptsAll: {
+    description: {
+      transitions: {
+        S: {
+          0: ['S'],
+          1: ['S'],
+          '': [],
+        },
+      },
+      start: 'S',
+      acceptStates: ['S'],
+    },
+    acceptedStrings: ['', '1', '100', '111', '0', '001', '0111111', '00000'],
+    rejectedStrings: [],
+  },
+  // Machine acccepts no strings
+  acceptsNothing: {
+    description: {
+      transitions: {
+        S: {
+          0: [],
+          1: [],
+          '': [],
+        },
+      },
+      start: 'S',
+      acceptStates: [],
+    },
+    acceptedStrings: [],
+    rejectedStrings: ['', '1', '100', '111', '0', '001', '0111111', '00000'],
+  },
+  // Machine any string that starts with 0
   startsWith0: {
     description: {
       transitions: {
@@ -37,7 +69,28 @@ const machineTests: {
     acceptedStrings: ['0', '001', '0111111', '00000'],
     rejectedStrings: ['', '1', '1000000', '1101'],
   },
-  // strings divisible by 3
+  // Machine accepts strings divisible by 2
+  div2: {
+    description: {
+      transitions: {
+        A: {
+          0: ['A', 'B'],
+          1: ['A'],
+          '': [],
+        },
+        B: {
+          0: [],
+          1: [],
+          '': [],
+        },
+      },
+      start: 'A',
+      acceptStates: ['B'],
+    },
+    acceptedStrings: ['1110', '0', '00', '10'],
+    rejectedStrings: ['', '11', '00001', '1011111'],
+  },
+  // Machine accepts strings divisible by 3
   div3: {
     description: {
       transitions: {
@@ -63,7 +116,7 @@ const machineTests: {
     acceptedStrings: ['', '0', '11', '00000', '1100000'],
     rejectedStrings: ['1010', '10', '100000', '1011111'],
   },
-  // strings divisible by 4
+  // Machine accepts strings divisible by 4
   div4: {
     description: {
       transitions: {
@@ -89,7 +142,7 @@ const machineTests: {
     acceptedStrings: ['00', '1100', '010100', '0000'],
     rejectedStrings: ['1111', '1', '0', '10110'],
   },
-  // string with any amount of 0s (including none)
+  // Machine accepts string with any amount of 0s (including none)
   lambdaZeros: {
     description: {
       transitions: {
@@ -115,7 +168,7 @@ const machineTests: {
     acceptedStrings: ['0', '', '00'],
     rejectedStrings: ['1111', '1', '01', '10110'],
   },
-  // starts with 0 and ends with another 0
+  // Machine accepts string that start with 0 and end with another 0
   startAndEndZero: {
     description: {
       transitions: {
@@ -146,7 +199,7 @@ const machineTests: {
     acceptedStrings: ['00', '010', '0000', '0100'],
     rejectedStrings: ['1111', '1', '0', '10110'],
   },
-  // any string with no 0s next to each other
+  // Machine accepts any string with no 0s next to each other
   noConsecutive0: {
     description: {
       transitions: {
@@ -177,7 +230,7 @@ const machineTests: {
     acceptedStrings: ['', '0', '01', '0111', '010101010'],
     rejectedStrings: ['00', '100', '100101', '0001'],
   },
-  // accepts '00' or '01' (nothing else!)
+  // Machine only accepts '00' or '01'
   zeroOneOrZeroZero: {
     description: {
       transitions: {
@@ -246,9 +299,3 @@ for (const [name, testDescription] of Object.entries(machineTests)) {
     }
   });
 }
-
-// removed from package.json:
-// "test:prettier": "prettier \"src/**/*.ts\" --list-different",
-
-// to test: yarn test
-// in terminal inside nfasm directory

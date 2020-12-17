@@ -5,8 +5,8 @@ Author: Megan Richardson
 This is a NFA simulator that takes in the description of a machine and 
 determines if a given string is accepted or rejected by the machine. 
 This simulator works for any machine with the alphabet {0, 1} and acts 
-as an NFA (i.e. accounts for lambda moves and transitions to a set of 
-states).
+as an NFA (i.e. accounts for lambda moves and transitions to multiple 
+or no states).
 */
 
 type State = string;
@@ -38,14 +38,9 @@ export default class NondeterministicFiniteStateMachine {
     const {
       description: { transitions },
     } = this;
-
-    // all the possible state to go to with the given state and input symbol
     let possibleTransitions = [];
-    // avoids using the symbol multiple times on the same "path"
     let statesUsingSymbol = [];
-
     for (let i = 0; i < Object.keys(transitions).length; i++) {
-      //finds transitions with symbol if you haven't already used it to get to the current state
       if (!statesUsingSymbol.includes(state)) {
         for (const newState of transitions[state][symbol]) {
           if (!possibleTransitions.includes(newState)) {
@@ -54,18 +49,15 @@ export default class NondeterministicFiniteStateMachine {
           }
         }
       }
-      // takes all the lambda moves to add to new states
       for (const newState of transitions[state]['']) {
         if (!possibleTransitions.includes(newState)) {
           possibleTransitions.push(newState);
         }
       }
-      // picks the next state we are analyzing
       if (i < possibleTransitions.length) {
         state = possibleTransitions[i];
       }
     }
-    // if we havent used the symbol then we are at "dead state" / not accepted
     if (statesUsingSymbol.length == 0) {
       possibleTransitions = [];
     }
