@@ -25,53 +25,35 @@ export default class NondeterministicFiniteStateMachine {
   }
 
   transition(state: State, symbol: InputSymbol): State[] {
-    console.log(state);
-
     const {
       description: { transitions },
     } = this;
 
     let possibleTransitions = [];
-    let usedSymbol = false;
+    let statesUsingSymbol = [];
 
-    // only loops the number of times of all states
     for (let i = 0; i < Object.keys(transitions).length; i++) {
-      console.log(i);
-      let newlyAdded = [];
-      // this doesn't work
-      // you can use the symbol multiple times just not on same "path" in machine\
-      // if you haven't used symbol or on different path (how do we keep track of what path we are on)
-      if (!usedSymbol) {
-        for (const newStates of transitions[state][symbol]) {
-          for (const newState of newStates) {
-            if (!possibleTransitions.includes(newState)) {
-              newlyAdded = newlyAdded.concat(newStates);
-              possibleTransitions = possibleTransitions.concat(newStates);
-              usedSymbol = true;
-            }
-          }
-        }
-      }
-      for (const newStates of transitions[state]['']) {
-        for (const newState of newStates) {
+      if (!statesUsingSymbol.includes(state)) {
+        for (const newState of transitions[state][symbol]) {
           if (!possibleTransitions.includes(newState)) {
-            newlyAdded = newlyAdded.concat(newStates);
-            possibleTransitions = possibleTransitions.concat(newStates);
+            possibleTransitions.push(newState);
+            statesUsingSymbol = statesUsingSymbol.concat(newState);
           }
         }
       }
-      for (let i = newlyAdded.length - 1; i >= 0; i--) {
-        state = newlyAdded[i];
+      for (const newState of transitions[state]['']) {
+        if (!possibleTransitions.includes(newState)) {
+          possibleTransitions.push(newState);
+        }
+      }
+      if (i < possibleTransitions.length) {
+        state = possibleTransitions[i];
       }
     }
 
-    if (!usedSymbol) {
+    if (statesUsingSymbol.length == 0) {
       possibleTransitions = [];
     }
-
-    console.log(symbol);
-    console.log(possibleTransitions);
-
     return possibleTransitions;
   }
 
@@ -79,10 +61,6 @@ export default class NondeterministicFiniteStateMachine {
     const {
       description: { acceptStates },
     } = this;
-
-    console.log('hi');
-    console.log(state);
-    console.log('bye');
 
     let nextStates = [];
     if (s.length > 0) {
@@ -94,10 +72,6 @@ export default class NondeterministicFiniteStateMachine {
     }
 
     const uniqueStates = [...new Set(nextStates)];
-
-    console.log(state); // doesn't
-    console.log(s);
-    console.log(uniqueStates);
 
     return s.length === 0
       ? state.some((r) => acceptStates.includes(r))
