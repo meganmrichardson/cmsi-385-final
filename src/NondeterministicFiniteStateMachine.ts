@@ -1,3 +1,14 @@
+/*
+Nondeterministic Finite State Machine Simulator
+Author: Megan Richardson
+
+This is a NFA simulator that takes in the description of a machine and 
+determines if a given string is accepted or rejected by the machine. 
+This simulator works for any machine with the alphabet {0, 1} and acts 
+as an NFA (i.e. accounts for lambda moves and transitions to a set of 
+states).
+*/
+
 type State = string;
 type InputSymbol = string;
 

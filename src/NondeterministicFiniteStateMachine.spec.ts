@@ -1,3 +1,8 @@
+/*
+Nondeterministic Finite State Machine Simulator Tests
+Author: Megan Richardson
+*/
+
 import test from 'ava';
 
 import NondeterministicFiniteStateMachine, {
