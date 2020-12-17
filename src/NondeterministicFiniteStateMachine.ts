@@ -68,7 +68,6 @@ export default class NondeterministicFiniteStateMachine {
     const {
       description: { acceptStates },
     } = this;
-    // finds all possible next states by finding all the transitions
     let nextStates = [];
     if (s.length > 0) {
       for (const currentState of state) {
@@ -78,9 +77,6 @@ export default class NondeterministicFiniteStateMachine {
       }
     }
     const uniqueStates = [...new Set(nextStates)];
-    // if you have gone through the string and one of the current
-    // states is an accept state the string is accepted
-    // else recursively find the transitions and states for next char
     return s.length === 0
       ? state.some((r) => acceptStates.includes(r))
       : this.accept(s.substr(1), uniqueStates);
