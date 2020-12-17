@@ -12,9 +12,6 @@ or no states).
 type State = string;
 type InputSymbol = string;
 
-// just make sure code is clear and concise and testing is good
-// and that I have a variety of machines being tested
-
 export interface NFADescription {
   transitions: {
     [key: string]: {
